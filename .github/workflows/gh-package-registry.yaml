@@ -19,13 +19,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          registry-url: https://npm.pkg.github.com/
       - run: npm install
       - run: npm run build
       - name: Publish
         run: |
           jq '.name="@${{ github.repository_owner }}/${{ github.event.repository.name }}"' package.json > package.json.tmp
           mv package.json.tmp package.json
-          npm config set registry https://npm.pkg.github.com/
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
