@@ -41,9 +41,8 @@ export const POST = async (
     const emailTemplateRepo = manager.getRepository(EmailTemplate)
     const options = req.body['template']
     const template = await emailTemplateRepo.findOneBy({ alias: options['alias'] })
-    template.json_template = options['json_template']
-    template.html_body = options['html_body']
-    template.notification_event = options['notification_event'] ?? template.notification_event
+
+    Object.assign(template, options)
 
     const postmarkClient = new PostmarkClient(process.env.POSTMARK_SERVER_TOKEN);
     const result = await postmarkClient.editTemplate(template.alias, {
