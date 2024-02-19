@@ -18,7 +18,7 @@ const EmailTemplateEditorPage = () => {
     );
 
     return (
-        <div>
+        <div className='min-h-full flex flex-col'>
             {isLoading && <span>Loading...</span>}
             {data?.template && (
                 <EmailTemplateEditor template={data.template} available_events={data.available_events} />
@@ -72,34 +72,39 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
     };
 
     return (
-        <div>
-            <div>
-                <label htmlFor="event-selector">Notification event</label>
-                <select
-                    name="Notification Event Selector"
-                    id="event-selector"
-                    value={selectedEvent ?? "unset"}
-                    onChange={(event) => setSelectedEvent(event.target.value as NotificationEvent)}
-                >
-                    {available_events.map((event) => (
-                        <option key={event} value={event}>{event}</option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                <label htmlFor="subject-input">Subject</label>
-                <input
-                    id="subject-input"
-                    type="text"
-                    value={subject}
-                    onChange={(event) => setSubject(event.target.value)}
-                />
+        <form onSubmit={(event) => event.preventDefault()} className='-mt-5 flex flex-col flex-grow'>
+            <h1 className="text-2xl font-semibold text-gray-900">{template.name}</h1>
+            <div className="flex flex-wrap space-x-4">
+                <div className="flex-1">
+                    <label htmlFor="event-selector" className="block text-sm font-medium text-gray-700">Notification event</label>
+                    <select
+                        name="Notification Event Selector"
+                        id="event-selector"
+                        value={selectedEvent ?? "unset"}
+                        onChange={(event) => setSelectedEvent(event.target.value as NotificationEvent)}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                        {available_events.map((event) => (
+                            <option key={event} value={event}>{event}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="flex-1">
+                    <label htmlFor="subject-input" className="block text-sm font-medium text-gray-700">Subject</label>
+                    <input
+                        id="subject-input"
+                        type="text"
+                        value={subject}
+                        onChange={(event) => setSubject(event.target.value)}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                </div>
             </div>
             <EmailEditor
                 ref={emailEditorRef}
                 onLoad={onLoad}
                 onReady={onReady}
-                minHeight={window.innerHeight - 150}
+                style={{ flexGrow: 1 }}
                 options={{
                     displayMode: 'email',
                     mergeTags: {},
@@ -109,6 +114,6 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
                     }
                 }}
             />
-        </div>
+        </form>
     )
 }
