@@ -35,18 +35,18 @@ const EmailTemplateCard = ({ template, onDelete, onRestore }: { template: EmailT
                 <div className="pb-2">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold" id={`template-name-${template.alias}`}>{template.name}</h2>
-                        <div>
+                        <div className="flex space-x-1">
                             <button
                                 type="button"
                                 onClick={restoreTemplate}
-                                className="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700"
+                                className="py-2 px-4 bg-blue-500 text-white rounded-l hover:bg-blue-700"
                             >
                                 Restore Template
                             </button>
                             <button
                                 type="button"
                                 onClick={permanentDelete}
-                                className="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700"
+                                className="py-2 px-4 bg-red-500 text-white rounded-r hover:bg-red-700"
                             >
                                 Permanently Delete
                             </button>
@@ -54,15 +54,11 @@ const EmailTemplateCard = ({ template, onDelete, onRestore }: { template: EmailT
                     </div>
                 </div>
                 <div className="flex justify-between items-end">
-                    <div className="text-sm text-gray-500 flex items-center">
-                        <p className="whitespace-nowrap">Deleted at:</p>
-                        <pre className="mt-1 text-black w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-gray-100 ml-2">
-                            {template.notification_event || "not set"}
-                        </pre>
-                    </div>
-                    <div className="text-sm text-gray-500 text-right">
+                    <div className="text-sm text-gray-500">
                         <p>Created: {new Date(template.created_at).toLocaleDateString()}</p>
                         <p>Last Updated: {new Date(template.updated_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="text-sm text-gray-500 text-right">
                         <p>Deleted at: {new Date(template.deleted_at).toLocaleDateString()}</p>
                     </div>
                 </div>
@@ -97,7 +93,7 @@ const EmailTemplatesTrash = () => {
         <div>
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-3xl font-bold">Email Templates</h1>
-                <a href="email-templates/new" className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Create New Template</a>
+                <a href="/a/email-templates/new" className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Create New Template</a>
             </div>
             {templates && templates.length === 0 && (
                 <span className="text-lg text-red-500">No Email Templates in Trash</span>

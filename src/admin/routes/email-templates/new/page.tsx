@@ -21,7 +21,7 @@ const CreateEmailTemplate = () => {
 const CreateEmailTemplateForm = (props: { names: string[] }) => {
     const { names } = props;
 
-    const [nameError, setNameError] = useState<string | undefined>(undefined);
+    const [nameError, setNameError] = useState<string | undefined>("Name is required");
 
     const templatePost = useAdminCustomPost<CreateEmailTemplateRequestBody, CreateEmailTemplateResponseBody>(
         `/admin/email-templates`,
@@ -54,6 +54,10 @@ const CreateEmailTemplateForm = (props: { names: string[] }) => {
                 <div className="flex flex-col">
                     <label htmlFor="name" className="mb-2 font-bold text-lg">Name</label>
                     <input type="text" id="name" name="name" onChange={(e) => {
+                        if (e.target.value === '' || e.target.value === undefined) {
+                            setNameError('Name is required.');
+                            return;
+                        }
                         setNameError(names.includes(e.target.value.toLowerCase()) ? 'This name already exists.' : undefined);
                     }} className="border-2 border-gray-200 p-2 rounded-lg focus:outline-none focus:border-blue-500" />
                     {nameError && <p className="text-red-500">{nameError}</p>}
@@ -62,7 +66,7 @@ const CreateEmailTemplateForm = (props: { names: string[] }) => {
                     <label htmlFor="subject" className="mb-2 font-bold text-lg">Subject</label>
                     <input type="text" id="subject" name="subject" className="border-2 border-gray-200 p-2 rounded-lg focus:outline-none focus:border-blue-500" />
                 </div>
-                <button type="submit" disabled={nameError !== null} className={`w-full py-2 px-4 rounded text-white ${nameError !== null ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}>Create</button>
+                <button type="submit" disabled={nameError !== undefined} className={`w-full py-2 px-4 rounded text-white ${nameError !== undefined ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}>Create</button>
             </form>
         </div>
     )
