@@ -71,6 +71,7 @@ export const DELETE = async (
     }
     const postmarkClient = new PostmarkClient(process.env.POSTMARK_SERVER_TOKEN);
     await postmarkClient.deleteTemplate(template.postmark_id);
-    await emailTemplateRepo.softDelete({ alias: alias });
+    await emailTemplateRepo.softRemove(template);
+    await emailTemplateRepo.save(template)
     res.status(204).json({})
 }

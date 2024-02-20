@@ -42,7 +42,10 @@ const EmailTemplates = () => {
         <div>
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-3xl font-bold">Email Templates</h1>
-                <a href="email-templates/new" className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Create New Template</a>
+                <div className="flex space-x-1">
+                    <a href="email-templates/new" className="inline-block px-4 py-2 bg-green-500 text-white rounded-l hover:bg-green-700">Create New Template</a>
+                    <a href="email-templates/trash" className="inline-block px-4 py-2 bg-gray-800 text-white rounded-r hover:bg-gray-900">View Trash</a>
+                </div>
             </div>
             {isLoading && <span>Loading...</span>}
             {data?.templates && !data.templates.length && (

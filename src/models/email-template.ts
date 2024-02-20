@@ -58,5 +58,6 @@ export default class EmailTemplate extends SoftDeletableEntity {
     @BeforeSoftRemove()
     beforeSoftRemoveActions() {
         this.notification_event = NotificationEvent.UNSET;
+        this.postmark_id = null;
     }
 }

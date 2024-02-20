@@ -5,9 +5,14 @@ import type {
 import { DeepPartial, EntityManager } from "typeorm"
 import EmailTemplate from "../../../models/email-template"
 import { Client as PostmarkClient } from 'postmark';
-import { CreateEmailTemplateResponse, GetEmailTemplatesRequest, GetEmailTemplatesResponse } from "src/types/email-template";
+import { CreateEmailTemplateResponse, GetEmailTemplatesRequest, GetEmailTemplatesResponse, CreateEmailTemplateRequest } from "src/types/email-template";
 
 
+/**
+ * GET /admin/email-templates
+ * 
+ * Returns a list of all email templates.
+ */
 export const GET = async (
     req: GetEmailTemplatesRequest,
     res: GetEmailTemplatesResponse
@@ -19,19 +24,10 @@ export const GET = async (
     })
 }
 
-interface CreateEmailTemplateRequest extends MedusaRequest {
-    body: {
-        template: DeepPartial<EmailTemplate>
-    }
-}
-
 /** 
  * POST /admin/email-templates
  * 
  * Creates a new email template.
- * 
- * Request body:
- * - template: Partial<EmailTemplate>
  */
 export const POST = async (
     req: CreateEmailTemplateRequest,

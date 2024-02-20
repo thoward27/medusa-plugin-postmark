@@ -1,6 +1,9 @@
+import { MedusaError } from "medusa-core-utils"
 import EmailTemplate from "../../../../models/email-template"
 import { GetEmailTemplatesRequest, GetEmailTemplatesResponse } from "../../../../types/email-template"
 import { DeepPartial, EntityManager, Not, IsNull } from "typeorm"
+import { MedusaRequest, MedusaResponse } from "@medusajs/medusa"
+import { Client as PostmarkClient } from 'postmark';
 
 export const GET = async (
     req: GetEmailTemplatesRequest,
@@ -10,6 +13,7 @@ export const GET = async (
     const emailTemplateRepo = manager.getRepository(EmailTemplate)
 
     res.json({
-        templates: await emailTemplateRepo.find({ withDeleted: true, where: { deleted_at: Not(IsNull())}}),
+        templates: await emailTemplateRepo.find({ withDeleted: true, where: { deleted_at: Not(IsNull()) } }),
     })
 }
+
