@@ -1,4 +1,4 @@
-import { Column, Entity, BeforeInsert, DeleteDateColumn } from "typeorm";
+import { Column, Entity, BeforeInsert, DeleteDateColumn, BeforeSoftRemove } from "typeorm";
 import { SoftDeletableEntity, generateEntityId } from "@medusajs/medusa";
 import { NotificationEvent } from "../types/email-template";
 
@@ -20,7 +20,7 @@ export default class EmailTemplate extends SoftDeletableEntity {
     postmark_id: number;
 
     // Medusa Event. 
-    @Column({ type: "enum", enum: NotificationEvent, default: NotificationEvent.UNSET})
+    @Column({ type: "enum", enum: NotificationEvent, default: NotificationEvent.UNSET })
     notification_event: NotificationEvent;
 
     // Alias to identify template. Can only be used if type is standard.
@@ -53,5 +53,10 @@ export default class EmailTemplate extends SoftDeletableEntity {
     @BeforeInsert()
     beforeInsertActions() {
         this.id = generateEntityId(this.id, "email-template");
+    }
+
+    @BeforeSoftRemove()
+    beforeSoftRemoveActions() {
+        this.notification_event = NotificationEvent.UNSET;
     }
 }
