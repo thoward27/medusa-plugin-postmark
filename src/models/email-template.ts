@@ -48,7 +48,7 @@ export default class EmailTemplate extends SoftDeletableEntity {
     layout?: string;
 
     @DeleteDateColumn()
-    deleted_at: Date | null;
+    deleted_at: Date | undefined;
 
     @BeforeInsert()
     beforeInsertActions() {
@@ -58,6 +58,6 @@ export default class EmailTemplate extends SoftDeletableEntity {
     @BeforeSoftRemove()
     beforeSoftRemoveActions() {
         this.notification_event = NotificationEvent.UNSET;
-        this.postmark_id = null;
+        this.postmark_id = undefined;
     }
 }

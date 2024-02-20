@@ -48,7 +48,7 @@ const EmailTemplates = () => {
                 </div>
             </div>
             {isLoading && <span>Loading...</span>}
-            {data?.templates && !data.templates.length && (
+            {data?.templates && data.templates.length === 0 && (
                 <span className="text-lg text-red-500">No Email Templates Found</span>
             )}
             {data?.templates && data.templates?.length > 0 && (

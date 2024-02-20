@@ -21,7 +21,7 @@ const CreateEmailTemplate = () => {
 const CreateEmailTemplateForm = (props: { names: string[] }) => {
     const { names } = props;
 
-    const [nameError, setNameError] = useState<string | null>(null);
+    const [nameError, setNameError] = useState<string | undefined>(undefined);
 
     const templatePost = useAdminCustomPost<CreateEmailTemplateRequestBody, CreateEmailTemplateResponseBody>(
         `/admin/email-templates`,
@@ -54,7 +54,7 @@ const CreateEmailTemplateForm = (props: { names: string[] }) => {
                 <div className="flex flex-col">
                     <label htmlFor="name" className="mb-2 font-bold text-lg">Name</label>
                     <input type="text" id="name" name="name" onChange={(e) => {
-                        setNameError(names.includes(e.target.value.toLowerCase()) ? 'This name already exists.' : null);
+                        setNameError(names.includes(e.target.value.toLowerCase()) ? 'This name already exists.' : undefined);
                     }} className="border-2 border-gray-200 p-2 rounded-lg focus:outline-none focus:border-blue-500" />
                     {nameError && <p className="text-red-500">{nameError}</p>}
                 </div>

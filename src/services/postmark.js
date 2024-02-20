@@ -8,10 +8,10 @@ import { NotificationEvent } from "../types/email-template";
 
 class PostmarkService extends NotificationService {
   static identifier = "postmark";
-  manager_ = null;
-  orderRepository_ = null;
-  cartRepository_ = null;
-  lineItemRepository_ = null;
+  manager_ = undefined;
+  orderRepository_ = undefined;
+  cartRepository_ = undefined;
+  lineItemRepository_ = undefined;
 
   /**
    * @param {Object} options - options defined in `medusa-config.js`
@@ -292,27 +292,27 @@ class PostmarkService extends NotificationService {
         }
         return attachments
       }
-      default:
-        return []
+      default: {return [];
+}
     }
   }
 
   async fetchData(event, eventData, attachmentGenerator) {
     switch (event) {
-      case "order.placed":
-        return this.orderPlacedData(eventData, attachmentGenerator)
-      case "order.shipment_created":
-        return this.orderShipmentCreatedData(eventData, attachmentGenerator)
-      case "order.canceled":
-        return this.orderCanceledData(eventData, attachmentGenerator)
-      case "user.password_reset":
-        return this.userPasswordResetData(eventData, attachmentGenerator)
-      case "customer.password_reset":
-        return this.customerPasswordResetData(eventData, attachmentGenerator)
-      case "gift_card.created":
-        return this.giftCardData(eventData, attachmentGenerator)
-      default:
-        return eventData
+      case 'order.placed': {return this.orderPlacedData(eventData, attachmentGenerator);
+}
+      case 'order.shipment_created': {return this.orderShipmentCreatedData(eventData, attachmentGenerator);
+}
+      case 'order.canceled': {return this.orderCanceledData(eventData, attachmentGenerator);
+}
+      case 'user.password_reset': {return this.userPasswordResetData(eventData, attachmentGenerator);
+}
+      case 'customer.password_reset': {return this.customerPasswordResetData(eventData, attachmentGenerator);
+}
+      case 'gift_card.created': {return this.giftCardData(eventData, attachmentGenerator);
+}
+      default: {return eventData;
+}
     }
   }
 
@@ -386,7 +386,7 @@ class PostmarkService extends NotificationService {
         }
       })
     }
-    return await this.client_.sendEmailWithTemplate(sendOptions)
+    return  this.client_.sendEmailWithTemplate(sendOptions)
       .then(() => ({ to: sendOptions.to, status: 'sent', data: sendOptions }))
       .catch((error) => {
         console.error(error)
@@ -415,7 +415,7 @@ class PostmarkService extends NotificationService {
       }
     })
 
-    return await this.client_.sendEmailWithTemplate(sendOptions)
+    return  this.client_.sendEmailWithTemplate(sendOptions)
       .then(() => ({ to: sendOptions.To, status: 'sent', data: sendOptions }))
       .catch((error) => {
         console.error(error)
@@ -748,7 +748,7 @@ class PostmarkService extends NotificationService {
 
   normalizeThumbUrl_(url) {
     if (!url)
-      return null
+      return 
     else if (url.startsWith("http"))
       return url
     else if (url.startsWith("//"))
@@ -768,10 +768,10 @@ class PostmarkService extends NotificationService {
       } catch (err) {
         console.log(err)
         console.warn("Failed to gather context for order")
-        return null
+        return 
       }
     }
-    return null
+    return 
   }
 }
 

@@ -99,7 +99,7 @@ const EmailTemplatesTrash = () => {
                 <h1 className="text-3xl font-bold">Email Templates</h1>
                 <a href="email-templates/new" className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Create New Template</a>
             </div>
-            {templates && !templates.length && (
+            {templates && templates.length === 0 && (
                 <span className="text-lg text-red-500">No Email Templates in Trash</span>
             )}
             {templates && templates.length > 0 && (
