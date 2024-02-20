@@ -1,4 +1,4 @@
-import { Column, Entity, BeforeInsert } from "typeorm";
+import { Column, Entity, BeforeInsert, DeleteDateColumn } from "typeorm";
 import { SoftDeletableEntity, generateEntityId } from "@medusajs/medusa";
 import { NotificationEvent } from "../types/email-template";
 
@@ -46,6 +46,9 @@ export default class EmailTemplate extends SoftDeletableEntity {
     // If this is a standard template, what layout should be used.
     @Column({ type: "varchar", length: 100 })
     layout?: string;
+
+    @DeleteDateColumn()
+    deleted_at: Date | null;
 
     @BeforeInsert()
     beforeInsertActions() {
