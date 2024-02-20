@@ -1,7 +1,7 @@
 import EmailEditor from 'react-email-editor'
 import { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAdminCustomQuery, useAdminCustomPost } from 'medusa-react';
+import { useAdminCustomQuery, useAdminCustomPost, useAdminCustomDelete } from 'medusa-react';
 import { GetEmailTemplateRequestBody, GetEmailTemplateResponseBody, NotificationEvent, UpdateEmailTemplateRequestBody, UpdateEmailTemplateResponseBody } from '../../../../../types/email-template';
 import { debounce } from 'lodash';
 import EmailTemplate from '../../../../../models/email-template';
@@ -39,6 +39,11 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
         [template.alias],
     );
 
+    const deleteHook = useAdminCustomDelete(
+        `/admin/email-templates/${template.alias}`,
+        [template.alias],
+    );
+
     const [selectedEvent, setSelectedEvent] = useState(template.notification_event);
     const [subject, setSubject] = useState(template.subject);
     useEffect(() => {
@@ -56,13 +61,23 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
                     notification_event: selectedEvent,
                     subject: subject,
                 }
-            });
-            if (selectedEvent !== template.notification_event) {
-                // reload the page to refresh the available merge tags.
-                window.location.reload();
-            }
+            }, {
+                onSuccess: () => {
+                    if (selectedEvent !== template.notification_event) {
+                        window.location.reload();
+                    }
+                }
+            })
         });
     }, 1000);
+
+    const deleteTemplate = () => {
+        deleteHook.mutate(void 0, {
+            onSuccess: () => {
+                window.location.href = '/a/email-templates';
+            }
+        })
+    }
 
     const onLoad = () => {
         emailEditorRef.current.editor.loadDesign(template.json_template);
@@ -77,7 +92,16 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
 
     return (
         <form onSubmit={(event) => event.preventDefault()} className='-mt-5 flex flex-col flex-grow'>
-            <h1 className="text-2xl font-semibold text-gray-900">{template.name}</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-semibold text-gray-900">{template.name}</h1>
+                <button
+                    type="button"
+                    onClick={deleteTemplate}
+                    className="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700"
+                >
+                    Delete Template
+                </button>
+            </div>
             <div className="flex flex-wrap space-x-4">
                 <div className="flex-1">
                     <label htmlFor="event-selector" className="block text-sm font-medium text-gray-700">Notification event</label>

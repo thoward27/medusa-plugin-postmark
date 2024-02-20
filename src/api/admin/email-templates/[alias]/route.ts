@@ -31,7 +31,6 @@ export const GET = async (
     })
 }
 
-
 export const POST = async (
     req: UpdateEmailTemplateRequest,
     res: UpdateEmailTemplateResponse
@@ -43,6 +42,8 @@ export const POST = async (
 
     Object.assign(template, options)
 
+    // Ensure that this object passes db validation before sending to Postmark.
+    await emailTemplateRepo.save(template)
     const postmarkClient = new PostmarkClient(process.env.POSTMARK_SERVER_TOKEN);
     const result = await postmarkClient.editTemplate(template.alias, {
         Name: template.name,
@@ -51,6 +52,25 @@ export const POST = async (
     });
     template.postmark_id = result.TemplateId
     await emailTemplateRepo.save(template)
+    res.status(204).json({})
+}
 
+export const DELETE = async (
+    req: MedusaRequest,
+    res: MedusaResponse
+) => {
+    const alias = req.params.alias
+    const manager: EntityManager = req.scope.resolve("manager")
+    const emailTemplateRepo = manager.getRepository(EmailTemplate)
+    const template = await emailTemplateRepo.findOneBy({ alias: alias })
+    if (!template) {
+        throw new MedusaError(
+            MedusaError.Types.NOT_FOUND,
+            `Email template with alias ${alias} was not found`
+        )
+    }
+    const postmarkClient = new PostmarkClient(process.env.POSTMARK_SERVER_TOKEN);
+    await postmarkClient.deleteTemplate(template.postmark_id);
+    await emailTemplateRepo.softDelete({ alias: alias });
     res.status(204).json({})
 }
