@@ -36,7 +36,7 @@ export class EmailTemplateCreate1708384991727 implements MigrationInterface {
                 'activity.inactive_customer'
             );
 
-            CREATE TABLE IF NOT EXISTS "_email_template" (
+            CREATE TABLE IF NOT EXISTS "email_template" (
                 "id" varchar(100) PRIMARY KEY,
                 "postmark_id" integer UNIQUE,
 
@@ -55,27 +55,18 @@ export class EmailTemplateCreate1708384991727 implements MigrationInterface {
             );
 
             CREATE OR REPLACE TRIGGER update_email_template_updated_at 
-                BEFORE UPDATE ON "_email_template" 
+                BEFORE UPDATE ON "email_template" 
                 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-            CREATE UNIQUE INDEX IF NOT EXISTS "_email_template__alias" ON "_email_template" ("alias");
-            CREATE UNIQUE INDEX IF NOT EXISTS "_email_template__event" ON "_email_template" ("notification_event") 
+            CREATE UNIQUE INDEX IF NOT EXISTS "email_template__alias" ON "email_template" ("alias");
+            CREATE UNIQUE INDEX IF NOT EXISTS "email_template__event" ON "email_template" ("notification_event") 
                 WHERE "notification_event" != 'unset';
-            
-            -- Create a view to hide deleted records
-            CREATE OR REPLACE VIEW "email_template" 
-                AS SELECT * FROM "_email_template" WHERE "deleted_at" IS NULL
-                WITH LOCAL CHECK OPTION;
-            CREATE OR REPLACE RULE "email_template__soft_delete" 
-                AS ON DELETE TO "email_template" 
-                DO INSTEAD UPDATE "_email_template" SET "deleted_at" = NOW() WHERE "id" = OLD.id;
             `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            DROP VIEW IF EXISTS "email_template";
-            DROP TABLE IF EXISTS "_email_template" CASCADE;
+            DROP TABLE IF EXISTS "email_template" CASCADE;
             DROP FUNCTION IF EXISTS to_kebab_case;
             DROP FUNCTION IF EXISTS update_updated_at_column;
             DROP TYPE IF EXISTS email_template_type;
