@@ -5,6 +5,7 @@ import { useAdminCustomQuery, useAdminCustomPost } from 'medusa-react';
 import { GetEmailTemplateRequestBody, GetEmailTemplateResponseBody, NotificationEvent, UpdateEmailTemplateRequestBody, UpdateEmailTemplateResponseBody } from '../../../../../types/email-template';
 import { debounce } from 'lodash';
 import EmailTemplate from '../../../../../models/email-template';
+import { NotificationEventVariables } from '../../../../../types/email-template';
 
 
 const EmailTemplateEditorPage = () => {
@@ -33,17 +34,16 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
     const { template, available_events } = props;
     const emailEditorRef = useRef(null);
 
-    const [selectedEvent, setSelectedEvent] = useState(template.notification_event);
-    const [subject, setSubject] = useState(template.subject ?? "");
-
-    useEffect(() => {
-        save();
-    }, [selectedEvent, subject]);
-
     const { mutate, status } = useAdminCustomPost<UpdateEmailTemplateRequestBody, UpdateEmailTemplateResponseBody>(
         `/admin/email-templates/${template.alias}`,
         [template.alias],
     );
+
+    const [selectedEvent, setSelectedEvent] = useState(template.notification_event);
+    const [subject, setSubject] = useState(template.subject);
+    useEffect(() => {
+        save();
+    }, [subject, selectedEvent]);
 
     const save = debounce(() => {
         emailEditorRef.current.editor.exportHtml((data) => {
@@ -57,6 +57,10 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
                     subject: subject,
                 }
             });
+            if (selectedEvent !== template.notification_event) {
+                // reload the page to refresh the available merge tags.
+                window.location.reload();
+            }
         });
     }, 1000);
 
@@ -107,11 +111,7 @@ const EmailTemplateEditor = (props: { template: EmailTemplate, available_events:
                 style={{ flexGrow: 1 }}
                 options={{
                     displayMode: 'email',
-                    mergeTags: {},
-                    user: {},
-                    features: {
-                        sendTestEmail: true,
-                    }
+                    mergeTags: NotificationEventVariables[selectedEvent],
                 }}
             />
         </form>

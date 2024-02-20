@@ -25,7 +25,6 @@ export const GET = async (
             `Email template with alias ${alias} was not found`
         )
     }
-    console.log(available_events);
     res.json({
         template: template,
         available_events: available_events

@@ -80,3 +80,43 @@ export enum NotificationEvent {
     ACTIVITY_INACTIVE_USER = "activity.inactive_user",
     ACTIVITY_INACTIVE_CUSTOMER = "activity.inactive_customer",
 }
+
+const _CustomerVariables = [
+    {
+        name: "Customer First Name",
+        value: "{{customer.first_name}}",
+        sample: "John",
+
+    },
+    {
+        name: "Customer Last Name",
+        value: "{{customer.last_name}}",
+        sample: "Doe",
+    },
+    {
+        name: "Customer Email",
+        value: "{{customer.email}}",
+        sample: "test@testson.com",
+    },
+];
+
+export const NotificationEventVariables = {
+    [NotificationEvent.UNSET]: undefined,
+    [NotificationEvent.ORDER_PLACED]: [..._CustomerVariables,],
+    [NotificationEvent.ORDER_CANCELLED]: [..._CustomerVariables,],
+    [NotificationEvent.ORDER_SHIPMENT_CREATED]: [..._CustomerVariables,],
+    [NotificationEvent.CUSTOMER_CREATED]: [..._CustomerVariables,],
+    [NotificationEvent.CUSTOMER_PASSWORD_RESET]: [..._CustomerVariables,],
+    [NotificationEvent.USER_CREATED]: [..._CustomerVariables,],
+    [NotificationEvent.USER_PASSWORD_RESET]: [
+        { name: "User Email", value: "{{email}}", sample: "test@testson.com" },
+        { name: "Token", value: "{{token}}", sample: "123456" },
+    ],
+    [NotificationEvent.AUTH_PASSWORD_RESET]: [
+        { name: "User Email", value: "{{email}}", sample: "test@testson.com" },
+        { name: "Token", value: "{{token}}", sample: "123456" },
+    ],
+    [NotificationEvent.AUTH_VERIFY_ACCOUNT]: [..._CustomerVariables],
+    [NotificationEvent.ACTIVITY_INACTIVE_USER]: [..._CustomerVariables],
+    [NotificationEvent.ACTIVITY_INACTIVE_CUSTOMER]: [..._CustomerVariables],
+}

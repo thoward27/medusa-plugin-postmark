@@ -42,7 +42,6 @@ const CreateEmailTemplateForm = (props: { names: string[] }) => {
             template: data,
         }, {
             onSuccess: (result) => {
-                console.log(result)
                 window.location.href = `edit/${result.alias}`
             }
         });
